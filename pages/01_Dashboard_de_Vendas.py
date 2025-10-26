@@ -20,12 +20,11 @@ df = pd.merge(left=df_vendas.reset_index(), right=df_produtos2[['produto','preco
 df.set_index('data', inplace=True)
 df['comissao'] = df['preco'] * comissao
 
-st.sidebar.markdown('## Filtros')
-
-data_inicial = st.sidebar.date_input('Data inicial:', df.index.date.max() - timedelta(days=30), min_value=df.index.date.min(), max_value=df.index.date.max())
-data_final = st.sidebar.date_input('Data final:', df.index.date.max(), min_value=df.index.date.min(), max_value=df.index.date.max())
-
 st.markdown('# Dashboard de vendas')
+
+col01, col02 = st.columns(2)
+data_inicial = col01.date_input('Selecione a data inicial:', df.index.date.max() - timedelta(days=30), min_value=df.index.date.min(), max_value=df.index.date.max())
+data_final = col02.date_input('Selecione a data final:', df.index.date.max(), min_value=df.index.date.min(), max_value=df.index.date.max())
 
 df_filtrado = df[(df.index.date >= data_inicial) & (df.index.date <= data_final)]
 df_filtrado_mes_anterior = df[(df.index.date >= data_inicial - timedelta(days=30)) & (df.index.date <= data_final - timedelta(days=30))]
@@ -67,7 +66,7 @@ selecao_keys = {'Forma de Pagamento': 'forma_pagamento',
                 'Produto': 'produto',
                 'Filial': 'filial',
                 'Vendedor': 'vendedor'}
-analise_selecionada = st.sidebar.selectbox('Variável gráfico de pizza:', list(selecao_keys.keys()))
+analise_selecionada = col32.selectbox('Selecione a variável a ser analisada no gráfico de pizza:', list(selecao_keys.keys()))
 analise_selecionada = selecao_keys[analise_selecionada]
 
 fig2 = px.pie(df_filtrado, names=analise_selecionada, values='preco')
@@ -75,5 +74,4 @@ col32.plotly_chart(fig2)
 
 st.divider()
 
-st.sidebar.divider()
 st.sidebar.markdown('Desenvolvido por [Matheus Dias](https://diassmatheus.github.io/)')

@@ -7,7 +7,10 @@ from datetime import datetime, date, timedelta
 st.set_page_config(layout="wide")
 
 st.markdown('# Bem vindo ao analisador de vendas')
-st.divider()
+st.info(
+    "🧭 **Dica:** Toda a navegação do aplicativo é feita pelo **menu lateral** à esquerda. "
+    "Use-o para explorar as páginas de análises, dashboards, dados brutos, adição e remoção de vendas."
+)
 
 st.markdown(
     '''

@@ -15,51 +15,58 @@ df_vendas = st.session_state['dados']['df_vendas']
 df_filiais = st.session_state['dados']['df_filiais']
 df_produtos = st.session_state['dados']['df_produtos']
 
-st.sidebar.markdown('## Adição de venda')
+st.markdown('# Adição e Remoção de Vendas')
 
-filiais = list(df_filiais['cidade'].unique())
-filial_selecionada = st.sidebar.selectbox('Selecione a filial:',filiais)
+col1, col2 = st.columns([0.3, 0.7])
 
-vendedores = list(df_filiais.loc[df_filiais['cidade'] == filial_selecionada, 'vendedores'].iloc[0].strip('][]').replace("'","").split(', '))
-vendedor_selecionado = st.sidebar.selectbox('Selecione o vendedor:', vendedores)
+adicionar_ou_remover = col1.selectbox('Deseja acionar ou remover venda?', ['Adicionar', 'Remover'])
 
-produtos = list(df_produtos['nome'].unique())
-produto_selecionado = st.sidebar.selectbox('Selecione o produto:', produtos)
+if adicionar_ou_remover == 'Adicionar':
+    col1.markdown('#### Adição de venda')
 
-nome_cliente = st.sidebar.text_input('Nome do cliente:')
+    filiais = list(df_filiais['cidade'].unique())
+    filial_selecionada = col1.selectbox('Selecione a filial:',filiais)
 
-genero_selecionado = st.sidebar.selectbox('Gênero do cliente:', ['masculino', 'feminino'])
+    vendedores = list(df_filiais.loc[df_filiais['cidade'] == filial_selecionada, 'vendedores'].iloc[0].strip('][]').replace("'","").split(', '))
+    vendedor_selecionado = col1.selectbox('Selecione o vendedor:', vendedores)
 
-forma_pagamento_selecionada = st.sidebar.selectbox('Selecione a forma de pagamento:', ['credito', 'boleto', 'pix'])
+    produtos = list(df_produtos['nome'].unique())
+    produto_selecionado = col1.selectbox('Selecione o produto:', produtos)
 
-adicionar_venda = st.sidebar.button('Adicionar venda')
-if adicionar_venda:
-    lista_adicionar = [df_vendas['id_venda'].max() + 1,
-                       filial_selecionada,
-                       vendedor_selecionado,
-                       produto_selecionado,
-                       nome_cliente,
-                       genero_selecionado,
-                       forma_pagamento_selecionada]
-    hora_adicionar = datetime.now()
-    df_vendas.loc[hora_adicionar] = lista_adicionar
-    caminho_arquivo = Path(__file__).resolve().parent.parent / 'datasets' / 'vendas.csv'
-    df_vendas.to_csv(caminho_arquivo, sep=';', decimal=',')
+    nome_cliente = col1.text_input('Nome do cliente:')
 
-st.sidebar.divider()
+    genero_selecionado = col1.selectbox('Gênero do cliente:', ['masculino', 'feminino'])
 
-st.sidebar.markdown('## Remoção de vendas')
+    forma_pagamento_selecionada = col1.selectbox('Selecione a forma de pagamento:', ['credito', 'boleto', 'pix'])
 
-id_remocao = st.sidebar.number_input('Digite o ID da venda que deseja remover:', 0, df_vendas['id_venda'].max())
+    adicionar_venda = col1.button('Adicionar venda')
+    if adicionar_venda:
+        lista_adicionar = [df_vendas['id_venda'].max() + 1,
+                        filial_selecionada,
+                        vendedor_selecionado,
+                        produto_selecionado,
+                        nome_cliente,
+                        genero_selecionado,
+                        forma_pagamento_selecionada]
+        hora_adicionar = datetime.now()
+        df_vendas.loc[hora_adicionar] = lista_adicionar
+        caminho_arquivo = Path(__file__).resolve().parent.parent / 'datasets' / 'vendas.csv'
+        df_vendas.to_csv(caminho_arquivo, sep=';', decimal=',')
 
-remover_venda = st.sidebar.button('Remover venda')
-if remover_venda:
-    df_vendas = df_vendas[df_vendas['id_venda'] != id_remocao]
-    caminho_arquivo = Path(__file__).resolve().parent.parent / 'datasets' / 'vendas.csv'
-    df_vendas.to_csv(caminho_arquivo, sep=';', decimal=',')
+elif adicionar_ou_remover == 'Remover':
+
+    col1.markdown('#### Remoção de vendas')
+
+    id_remocao = col1.number_input('Digite o ID da venda que deseja remover:', 0, df_vendas['id_venda'].max())
+
+    remover_venda = col1.button('Remover venda')
+    if remover_venda:
+        df_vendas = df_vendas[df_vendas['id_venda'] != id_remocao]
+        caminho_arquivo = Path(__file__).resolve().parent.parent / 'datasets' / 'vendas.csv'
+        df_vendas.to_csv(caminho_arquivo, sep=';', decimal=',')
 
 df_vendas_ordenado = df_vendas.sort_values(by='id_venda', ascending=False)
-st.dataframe(df_vendas_ordenado)
+col2.markdown('#### Tabela de vendas')
+col2.dataframe(df_vendas_ordenado, height=800)
 
-st.sidebar.divider()
 st.sidebar.markdown('Desenvolvido por [Matheus Dias](https://diassmatheus.github.io/)')
