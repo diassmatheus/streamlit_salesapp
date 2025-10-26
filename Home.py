@@ -26,7 +26,7 @@ st.markdown(
     A estrutura em múltiplas páginas e o uso de mecanismos de cache e reaproveitamento de dados garantem desempenho, 
     consistência e fácil expansão do aplicativo.
 
-    Os dados utilizados foram gerados pelo script [gerador_de_vendas.py](https://github.com/diassmatheus), 
+    Os dados utilizados foram gerados pelo script [gerador_de_vendas.py](https://github.com/diassmatheus/streamlit_salesapp/blob/main/datasets/gerador_de_vendas.py), 
     e podem ser visualizados na aba **Dados Brutos**.
     '''
             )
