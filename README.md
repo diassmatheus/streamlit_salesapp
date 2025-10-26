@@ -1,1 +1,1 @@
-https://sales-app-matheusdias.streamlit.app/
+https://salesappmatheusdias.streamlit.app/
